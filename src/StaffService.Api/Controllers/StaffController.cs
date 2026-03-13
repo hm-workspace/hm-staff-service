@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StaffService.Utils.Common;
 using StaffService.InternalModels.DTOs;
 using StaffService.InternalModels.Entities;
@@ -6,6 +7,7 @@ using StaffService.Services;
 
 namespace StaffService.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/staff")]
 public class StaffController : ControllerBase
