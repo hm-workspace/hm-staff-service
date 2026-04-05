@@ -1,9 +1,11 @@
 using System.Text;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StaffService.Data;
 using StaffService.Repository;
+using StaffService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +31,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
-builder.Services.AddScoped<IStaffRepository, DapperStaffRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IStaffService, StaffService.Services.StaffService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -57,6 +60,11 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
 app.UseSwagger(options =>
 {
     options.RouteTemplate = "api/staff/swagger/{documentName}/swagger.json";
@@ -76,6 +84,7 @@ app.MapControllers();
 app.MapGet("/health", () => Results.Ok());
 
 app.Run();
+
 
 
 
